@@ -2,10 +2,10 @@ from ultralytics import YOLO
 import os
 
 # 加载预训练的 YOLO26n 模型
-model = YOLO("runs/detect/train4/weights/best.pt")
+model = YOLO("../runs/detect/train8/weights/best.pt")
 
 # 对图像执行目标检测
-results = model("C:/Users/Wadec/Desktop/african-wildlife/test/1 (18).jpg")  # 可以替换为本地图像路径
+results = model("../../datasets/african-wildlife/images/test/2 (34).jpg")  # 可以替换为本地图像路径
 
 # 显示结果
 results[0].show()
