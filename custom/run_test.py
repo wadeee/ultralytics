@@ -1,17 +1,29 @@
 from ultralytics import YOLO
 import os
+import glob
 
 # 加载预训练的 YOLO26n 模型
 model = YOLO("../runs/detect/train8/weights/best.pt")
 
-# 对图像执行目标检测
-results = model("../../datasets/african-wildlife/images/test/2 (34).jpg")  # 可以替换为本地图像路径
+# 设置图片路径 - 支持单个文件或文件夹
+image_path = "../../datasets/african-wildlife/images/test"  # 可以是单个文件或文件夹路径
 
-# 显示结果
-results[0].show()
+# 获取所有图片文件
+if os.path.isfile(image_path):
+    # 单个文件
+    image_files = [image_path]
+else:
+    # 文件夹 - 支持常见图片格式
+    image_extensions = ['*.jpg', '*.jpeg', '*.png', '*.bmp', '*.tiff']
+    image_files = []
+    for ext in image_extensions:
+        image_files.extend(glob.glob(os.path.join(image_path, ext)))
+    image_files.sort()  # 按名称排序
 
-# 保存结果
-results[0].save("labels/results.jpg")
+print(f"找到 {len(image_files)} 个图片文件")
+
+# 批量处理图片
+results = model(image_files)  # 一次性处理所有图片
 
 # 输出 YOLO 格式的标记 txt 文件
 def save_yolo_labels(results, output_dir="labels"):
@@ -48,6 +60,17 @@ def save_yolo_labels(results, output_dir="labels"):
                 f.write(f"{class_id} {x_center:.6f} {y_center:.6f} {box_width:.6f} {box_height:.6f}\n")
         
         print(f"YOLO labels saved to: {txt_path}")
+
+# 批量显示和保存结果
+for i, result in enumerate(results):
+    # 显示结果（可选，注释掉可以避免弹出多个窗口）
+    # result.show()
+    
+    # 保存结果图片
+    img_name = os.path.basename(result.path)
+    output_path = f"labels/{img_name}"
+    result.save(output_path)
+    print(f"处理完成: {img_name}")
 
 # 保存 YOLO 格式的标记文件
 save_yolo_labels(results)
