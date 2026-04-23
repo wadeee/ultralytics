@@ -65,11 +65,18 @@ def main():
 
     print(f"找到 {len(image_files)} 个图片文件")
 
-    # 批量处理图片 - 显式指定使用 GPU
-    results = model(image_files, device='cuda')  # 一次性处理所有图片，使用 GPU
+    # 每次处理 4-8 张
+    batch_size = 64
+    all_results = []
+
+    for i in range(0, len(image_files), batch_size):
+        batch = image_files[i:i + batch_size]
+        # 批量处理图片 - 显式指定使用 GPU
+        results = model(batch, device='cuda')  # 一次性处理所有图片，使用 GPU
+        all_results.extend(results)
 
     # 批量显示和保存结果
-    for i, result in enumerate(results):
+    for i, result in enumerate(all_results):
         # 显示结果（可选，注释掉可以避免弹出多个窗口）
         # result.show()
 
