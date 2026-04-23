@@ -3,7 +3,7 @@ import os
 import glob
 
 # 输出 YOLO 格式的标记 txt 文件
-def save_yolo_labels(results, output_dir="labels"):
+def save_yolo_detect_labels(results, output_dir="detect"):
     # 创建输出目录
     os.makedirs(output_dir, exist_ok=True)
     
@@ -73,12 +73,12 @@ def main():
         
         # 保存结果图片
         img_name = os.path.basename(result.path)
-        output_path = f"labels/{img_name}"
+        output_path = f"detect/{img_name}"
         result.save(output_path)
         print(f"处理完成: {img_name}")
 
     # 保存 YOLO 格式的标记文件
-    save_yolo_labels(results)
+    save_yolo_detect_labels(results)
 
 
 if __name__ == '__main__':
