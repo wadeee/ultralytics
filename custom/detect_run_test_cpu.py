@@ -42,8 +42,9 @@ def save_yolo_detect_labels(results, output_dir="detect"):
 def main():
     """主函数，用于执行目标检测和结果处理。"""
     # 加载预训练的 YOLO26n 模型
-    model = YOLO("../runs/detect/train8/weights/best.pt")
+    model = YOLO("../runs/detect/train-6/weights/best.pt")
 
+    model.to("cpu")
     print(f"模型设备: {next(model.parameters()).device}")  # 验证设备
 
     # 设置图片路径 - 支持单个文件或文件夹
@@ -64,7 +65,7 @@ def main():
     print(f"找到 {len(image_files)} 个图片文件")
 
     # 批量处理图片
-    results = model(image_files)  # 一次性处理所有图片
+    results = model(image_files, device="cpu")  # 一次性处理所有图片
 
     # 批量显示和保存结果
     for i, result in enumerate(results):

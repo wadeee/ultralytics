@@ -42,7 +42,7 @@ def save_yolo_detect_labels(results, output_dir="detect"):
 def main():
     """主函数，用于执行目标检测和结果处理。"""
     # 加载预训练的 YOLO26n 模型
-    model = YOLO("../runs/detect/train8/weights/best.pt")
+    model = YOLO("../runs/detect/train-6/weights/best.pt")
 
     # 确保使用 GPU 运行
     model.to('cuda')  # 将模型移至 GPU

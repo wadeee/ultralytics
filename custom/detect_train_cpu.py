@@ -6,4 +6,9 @@ if __name__ == '__main__':
     model.to("cpu")
 
     # Train the model
-    results = model.train(data="custom/african-wildlife.yaml", epochs=100, imgsz=640)
+    results = model.train(
+        data="custom/african-wildlife.yaml",
+        epochs=100,
+        imgsz=640,
+        device="cpu"
+    )
