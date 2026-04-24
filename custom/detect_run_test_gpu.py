@@ -44,8 +44,6 @@ def main():
     # 加载预训练的 YOLO26n 模型
     model = YOLO("../runs/detect/train-6/weights/best.pt")
 
-    # 确保使用 GPU 运行
-    model.to('cuda')  # 将模型移至 GPU
     print(f"模型设备: {next(model.parameters()).device}")  # 验证设备
 
     # 设置图片路径 - 支持单个文件或文件夹

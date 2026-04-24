@@ -40,7 +40,6 @@ def main():
     # 加载预训练的 YOLO26n 模型
     model = YOLO("../runs/segment/train-5/weights/best.pt")
 
-    model.to("cpu")
     print(f"模型设备: {next(model.parameters()).device}")  # 验证设备
 
     # 设置图片路径 - 支持单个文件或文件夹
