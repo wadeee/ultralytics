@@ -87,7 +87,7 @@ def main():
         print(f"处理完成: {img_name}")
 
     # 保存 YOLO 格式的标记文件
-    save_yolo_detect_labels(results)
+    save_yolo_detect_labels(all_results)
 
 
 if __name__ == '__main__':

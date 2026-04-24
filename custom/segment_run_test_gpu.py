@@ -14,27 +14,23 @@ def save_yolo_segment_labels(results, output_dir="segment"):
         txt_name = os.path.splitext(img_name)[0] + ".txt"
         txt_path = os.path.join(output_dir, txt_name)
 
-        # 获取图像尺寸
-        height, width = result.orig_shape
-
         # 打开 txt 文件
         with open(txt_path, "w") as f:
-            # 遍历每个检测到的目标
-            for box in result.boxes:
-                # 获取类别 ID
-                class_id = int(box.cls[0])
+            # 检查是否有分割掩码
+            if result.masks is not None:
+                # 遍历每个检测到的目标
+                for i in range(len(result.masks)):
+                    # 获取类别 ID
+                    class_id = int(result.boxes[i].cls[0])
 
-                # 获取边界框坐标 (x1, y1, x2, y2)
-                x1, y1, x2, y2 = box.xyxy[0]
+                    # 获取归一化的分割点
+                    segment = result.masks.xyn[i]
 
-                # 计算 YOLO 格式的坐标 (归一化)
-                x_center = (x1 + x2) / 2 / width
-                y_center = (y1 + y2) / 2 / height
-                box_width = (x2 - x1) / width
-                box_height = (y2 - y1) / height
+                    # 将点连接成字符串
+                    segment_str = " ".join([f"{p[0]:.6f} {p[1]:.6f}" for p in segment])
 
-                # 写入 txt 文件
-                f.write(f"{class_id} {x_center:.6f} {y_center:.6f} {box_width:.6f} {box_height:.6f}\n")
+                    # 写入 txt 文件
+                    f.write(f"{class_id} {segment_str}\n")
 
         print(f"YOLO labels saved to: {txt_path}")
 
@@ -87,7 +83,7 @@ def main():
         print(f"处理完成: {img_name}")
 
     # 保存 YOLO 格式的标记文件
-    save_yolo_segment_labels(results)
+    save_yolo_segment_labels(all_results)
 
 
 if __name__ == '__main__':
